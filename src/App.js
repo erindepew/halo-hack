@@ -1,41 +1,105 @@
-import React, { PureComponent } from 'react';
-import './App.css';
-import {Part, Main, View} from './styled';
+import React, { PureComponent, useState } from 'react';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+import {FormInput, ButtonSecondary} from '@spotify-internal/creator-tape'
+import queryString from 'query-string';
+import { Wrapper} from './styled';
+import { Store } from './store';
+import Halo from './Halo';
+import Form from './Form';
+import {getApplicationToken} from './api';
+import SpotifyWebApi from 'spotify-web-api-js';
 
 export default class App extends PureComponent {
   state = {
-    complexity: 20,
-    speed:[1, 2, 3, 4, 5],
-    colors: [['255, 255, 255', '180, 155, 200', '255, 200, 100'], ['255, 70, 50', '245, 155, 35', '240, 55, 165'], ['80, 155, 245', '160, 195, 210', '155, 240, 225' ]],
-    size: [1, 2, 3, 4, 5],
-    randomness: [5, 10, 15, 20],
-    thickness: [1, 2, 3, 4, 5]
+    userLoggedIn: false,
+    spotifyWebAPI: null,
+    audioFeatures: null,
+  };
+  componentDidMount() {
+
+    const appToken = 'c77c1f8d728e440785c65066549397b0';
+    const redirectURI = encodeURIComponent(
+      `https://example.com/callback`
+    );
+    // this.scopes = encodeURIComponent(
+    //   'user-read-private playlist-read-private playlist-read-collaborative' +
+    //     ' playlist-modify-private playlist-modify-public'
+    // );
+   
+
+    // let tokenObject = {
+    //   value: queryString.parse(window.location.hash).access_token,
+    //   genDate: Date.now(),
+    // };
+    // debugger;
+    // console.log(tokenObject.value);
+    // // Get the login from the cache if necessary
+    // if (tokenObject.value) {
+    //   this.setCurrentToken(tokenObject);
+    // } else {
+    //   tokenObject = this.getCurrentToken();
+    // }
+
+    // if (tokenObject && tokenObject.value) {
+    //   if (tokenObject.genDate <= Date.now() - 3600000) {
+    //     this.removeCurrentToken();
+    //   } else {
+    //     this.setState({userLoggedIn: true});
+    //     window.location.hash = '';
+    //   }
+    // } else {
+    //   this.removeCurrentToken();
+    // }
+
+    // if (!this.state.userLoggedIn) {
+    //   window.location.href = `https://accounts.spotify.com/authorize?client_id=${appToken}&redirect_uri=${redirectURI}&response_type=token`;
+    // }
+
+    const spotifyWebAPI = new SpotifyWebApi();
+    spotifyWebAPI.setAccessToken('BQB7NpVsap_N5dohoTap4dQnZQxzlj9G8sVQfyJNPpnbnAGFfMMK4cA8sMCyA99gd64T_2EF6NvrfVd0VGyOjkObzKpgByXAPzXQULJ0ntAgSGejPTehedpAu7EgXPKdqUWwUGb4c0l8eIizcmGS6yy8NvU2P-d9JA')
+    this.setState({spotifyWebAPI})
   }
 
-  renderDivs = (n, complexity) => {
-    const {colors, speed, randomness, thickness} = this.state;
-    const colorSet = colors[0];
-    if (complexity > 0 ) {
-      for (let i = 0; i < n; i++) {
-        return (
-          <Part className="part" key={complexity} speed={70 / speed[1]} color1={colorSet[0]} color2={colorSet[1]} color3={colorSet[2]} size={100 - randomness[0]}  thickness={thickness[1]}>
-          {this.renderDivs(n, complexity - 1)}
-        </Part>
-        )
-      }
+  getAudioFeatures = (value) => {
+    const spotifyId = value.split(':')[2];
+    const type = value.split(':')[1];
+    if (type === "track") {
+       this.state.spotifyWebAPI.getAudioFeaturesForTrack(spotifyId, (error, res) => {
+           if (error) {
+               console.log(error);
+               return;
+           }
+           console.log(res);
+           this.setState({audioFeatures: res});
+        })
     }
-    else { return (<Part className="part" key={complexity} speed={70 / speed[0]} color1={colorSet[0]} color2={colorSet[1]} color3={colorSet[2]} size={100 - randomness[0]} thickness={thickness[1]}></Part>) }
-    };
+}
+  // setCurrentToken(tokenObject) {
+  //   sessionStorage.setItem('tokenobject', JSON.stringify(tokenObject));
+  // }
+  // getCurrentToken() {
+  //   debugger;
+  //   return JSON.parse(sessionStorage.getItem('tokenobject'));
+  // }
 
-  render() { 
-    const {complexity, size, speed} = this.state;
-    return ( 
-    <div className="App">
-    <View>
-<Main speed={10 / speed[0]} size={15 / size[0]}>
-      {this.renderDivs(1, complexity)}
-</Main>
-</View>
-    </div>
-  )}
+  // removeCurrentToken() {
+  //   sessionStorage.removeItem('tokenobject');
+  // }
+  // let store = React.useContext(Store);
+  // console.log(store)
+    render () {
+      return ( 
+      <Router>
+        <Wrapper>
+          {this.state.audioFeatures ? 
+               <Halo audioFeatures={this.state.audioFeatures}/> : 
+          <Form onSubmit={this.getAudioFeatures} /> }
+   
+        {/* <ButtonSecondary onClick={this.loginLink}>
+                Login with your Spotify Account
+        </ButtonSecondary> */}
+        </Wrapper>
+    </Router> );
+    };
 };
