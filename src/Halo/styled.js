@@ -56,8 +56,8 @@ animation: ${rotate} ${props => props.speed}s linear infinite;
     height: 100%;
     box-sizing: border-box;
     border-radius: 50%;
-    border-left: ${props => props.thickness} solid hsla(${props => props.color1}, 1);
+    border-left: ${props => props.thickness} solid hsla(${props => props.highlight}, 1);
     animation: ${zRotate} 1s linear infinite;
-    ${props => `box-shadow: -1px 0 hsla(${props.color1}, 1), -4px 0 8px hsla(${props.color2},1), inset 4px 0 8px hsla(${props.color3}, 0.7);`}
+    ${props => `box-shadow: -1px 0 hsla(${props.highlight}, 1), -4px 0 8px hsla(${props.mainColor},1), inset 4px 0 8px hsla(${props.shadow}, 0.7);`}
 }`
   

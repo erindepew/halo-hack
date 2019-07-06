@@ -13,52 +13,34 @@ export default class Halo extends PureComponent {
   }
 
   componentDidMount() {
-    const audioFeatures = this.props.audioFeatures;
-    // const colors = [['255, 255, 255', '180, 155, 200', '255, 200, 100'], ['255, 70, 50', '245, 155, 35', '240, 55, 165'], ['80, 155, 245', '160, 195, 210', '155, 240, 225' ], ['255, 255, 255', '180, 155, 200', '255, 200, 100'], ['255, 70, 50', '245, 155, 35', '240, 55, 165'], ['80, 155, 245', '160, 195, 210', '155, 240, 225' ], ['255, 255, 255', '180, 155, 200', '255, 200, 100'], ['255, 70, 50', '245, 155, 35', '240, 55, 165'], ['80, 155, 245', '160, 195, 210', '155, 240, 225' ]];
-    let hue; 
-    if (audioFeatures.valence > 0.5) {
-      const degrees = (audioFeatures.key * 15);
-      if (degrees >= 90) {
-        hue = 360 - (degrees - 90); 
-      }
-      else {
-        hue = 90 - degrees; 
-      }
-    }
-    else {
-      hue = 270 - (audioFeatures.key * 15);
-    }
+    const {danceability, energy, tempo, loudness, acousticness, key} = this.props.audioFeatures;
     this.setState({
-      randomness: Math.round(10 * audioFeatures.danceability),
-      complexity: Math.round(10 * audioFeatures.energy),
-      speed: Math.round(audioFeatures.tempo / 20),
-      size: Math.round(audioFeatures.loudness + 30),
-      thickness: Math.round(audioFeatures.acousticness * 5),
-      saturation: Math.round(audioFeatures.energy * 10) * 10,
-      hue: audioFeatures.key * 15
+      randomness: Math.round(10 * danceability),
+      complexity: Math.round(10 * energy),
+      speed: Math.round(tempo / 20),
+      size: Math.round(loudness + 30),
+      thickness: Math.round(acousticness * 5),
+      saturation: Math.round(10 * energy) * 10,
+      hue: key * 15
     })
   }
 
-  // 90 - 0 - 270 major keys 
-  // 91 - 269 minor keys 
-  // each key is 15 degrees on the circle 
-
   renderDivs = (n, complexity) => {
     const {hue, saturation, speed, randomness, thickness} = this.state;
-    const highlight = `${hue}, ${saturation}%, 50%`;
+    const highlight = `${hue}, ${saturation / 2}%, 50%`;
     const mainColor = `${hue}, ${saturation}%, 50%`;
-    const shadow = `${hue}, ${saturation}%, 50%`;
+    const shadow = `${hue + 15}, ${saturation}%, 30%`;
 
     if (complexity > 0 ) {
       for (let i = 0; i < n; i++) {
         return (
-          <Part className="part" key={complexity} speed={speed} color1={highlight} color2={mainColor} color3={shadow} size={100 - randomness}  thickness={thickness}>
+          <Part key={complexity} size={100 - randomness} speed={speed} highlight={highlight} mainColor={mainColor} shadow={shadow} thickness={thickness}>
           {this.renderDivs(n, complexity - 1)}
         </Part>
         )
       }
     }
-    else { return (<Part className="part" key={complexity} speed={speed} color1={highlight} color2={mainColor} color3={shadow} size={100 - randomness} thickness={thickness}></Part>) }
+    else { return (<Part key={complexity} size={100 - randomness} speed={speed} highlight={highlight} mainColor={mainColor} shadow={shadow} thickness={thickness}></Part>) }
     };
 
   render() { 

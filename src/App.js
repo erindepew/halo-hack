@@ -57,7 +57,7 @@ export default class App extends PureComponent {
     // }
 
     const spotifyWebAPI = new SpotifyWebApi();
-    spotifyWebAPI.setAccessToken('BQB7NpVsap_N5dohoTap4dQnZQxzlj9G8sVQfyJNPpnbnAGFfMMK4cA8sMCyA99gd64T_2EF6NvrfVd0VGyOjkObzKpgByXAPzXQULJ0ntAgSGejPTehedpAu7EgXPKdqUWwUGb4c0l8eIizcmGS6yy8NvU2P-d9JA')
+    spotifyWebAPI.setAccessToken('BQDGdKMsqaK5vP491aALzks_vbApIxxX2ioYjpCwllY9GQw5XA6iu_cp1wg0GkdtgHVs7gSNMvcpb8l0Zi3l1wUXhrzemUK-mN59h59A3LS5F0xiIFT7huv63oJDz70_e-ACCWxvSL53nJduRVxEyLK6AxOEMLJe7Q')
     this.setState({spotifyWebAPI})
   }
 
