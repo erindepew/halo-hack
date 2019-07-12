@@ -1228,6 +1228,11 @@
     "@spotify-internal/tokens" "^1.0.0"
     prop-types "^15.6.0"
 
+"@spotify-internal/tape-tokens@^2.0.2":
+  version "2.0.2"
+  resolved "https://artifactory.spotify.net/artifactory/api/npm/virtual-npm/@spotify-internal/tape-tokens/-/@spotify-internal/tape-tokens-2.0.2.tgz#0ab050c94830c81e9ff7cc74881ab4e3d8c39149"
+  integrity sha1-CrBQyUgwyB6f98x0iBq049jDkUk=
+
 "@spotify-internal/tokens@^1.0.0":
   version "1.2.1"
   resolved "https://artifactory.spotify.net/artifactory/api/npm/virtual-npm/@spotify-internal/tokens/-/@spotify-internal/tokens-1.2.1.tgz#d2bed5066704a55a5ffbb0aba23b24f9b2fe82ca"

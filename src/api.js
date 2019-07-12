@@ -8,3 +8,14 @@ export const getApplicationToken = () => {
     },
   });
 }
+
+export function getCurrentUserProfile(token) {
+  return axios
+    .get('https://api.spotify.com/v1/me', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+}

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@spotify-internal/creator-tape": "^3.6.0",
+    "@spotify-internal/tape-tokens": "^2.0.2",
     "axios": "^0.19.0",
     "query-string": "^6.8.1",
     "react": "^16.8.6",

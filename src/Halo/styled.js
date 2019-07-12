@@ -1,4 +1,6 @@
 import styled, {keyframes} from 'styled-components';
+import {white} from '@spotify-internal/tokens/creator/web/tokens.common';
+import {Type, Image} from '@spotify-internal/creator-tape'
 
 const rotate = keyframes`
 from {
@@ -60,4 +62,32 @@ animation: ${rotate} ${props => props.speed}s linear infinite;
     animation: ${zRotate} 1s linear infinite;
     ${props => `box-shadow: -1px 0 hsla(${props.highlight}, 1), -4px 0 8px hsla(${props.mainColor},1), inset 4px 0 8px hsla(${props.shadow}, 0.7);`}
 }`
+
+export const Header = styled.div`
+  margin: 20px;
+`
+
+export const AlbumTitle = styled(Type.p)`
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+`
+
+export const TrackLink = styled.a`
+  text-decoration: none;
+`
+export const TrackTitle = styled(Type.p)`
+font-family: Arial, Helvetica, sans-serif;   
+margin: 0 0 8px;
+border-bottom: 1px solid ${white};
+`
+export const StyledImage = styled(Image)`
+float: left;
+height: 64px;
+width: 64px;
+`
+export const Metadata = styled.div`
+  float: left;
+  text-align: left;
+  margin-left: 20px;
+`
   

@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import {Part, Main, View} from './styled';
+import {Type} from '@spotify-internal/creator-tape'
+import {white} from '@spotify-internal/tokens/creator/web/tokens.common';
+import {Part, Main, View, Header, AlbumTitle, TrackTitle, TrackLink, StyledImage, Metadata} from './styled';
 
 export default class Halo extends PureComponent {
   state = {
@@ -45,8 +47,26 @@ export default class Halo extends PureComponent {
 
   render() { 
     const {complexity, size} = this.state;
+    const {audioInfo, type} = this.props;
     return ( 
     <div>
+    {type === 'track' ? 
+      <Header>
+      <StyledImage src={audioInfo.album.images[2].url} alt="album image" />
+        <Metadata>
+        <TrackLink href={audioInfo.external_urls.spotify}><TrackTitle variant={Type.body1} color={white}>{audioInfo.name}</TrackTitle></TrackLink>
+        <AlbumTitle variant={Type.body3} color={white}>{audioInfo.album.name}</AlbumTitle>
+        <AlbumTitle variant={Type.body3} color={white}>{audioInfo.album.artists[0].name}</AlbumTitle> 
+        </Metadata>
+      </Header>
+      : 
+      <Header>
+      <StyledImage src={audioInfo.images[2].url} alt="arist image" />
+        <Metadata>
+        <TrackLink href={audioInfo.external_urls.spotify}><TrackTitle variant={Type.body1} color={white}>{audioInfo.name}</TrackTitle></TrackLink>
+        </Metadata>
+      </Header>
+    }
     <View>
 <Main speed={2} size={size}>
       {this.renderDivs(1, complexity)}
