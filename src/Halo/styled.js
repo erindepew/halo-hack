@@ -67,23 +67,21 @@ export const Header = styled.div`
   margin: 20px;
 `
 
-export const AlbumTitle = styled(Type.p)`
-  font-family: Arial, Helvetica, sans-serif;
+export const SubTitle = styled(Type.p)`
   margin: 0;
 `
 
 export const TrackLink = styled.a`
   text-decoration: none;
 `
-export const TrackTitle = styled(Type.p)`
-font-family: Arial, Helvetica, sans-serif;   
-margin: 0 0 8px;
-border-bottom: 1px solid ${white};
+export const Title = styled(Type.p)` 
+  margin: 0 0 8px;
+  border-bottom: 1px solid ${white};
 `
 export const StyledImage = styled(Image)`
-float: left;
-height: 64px;
-width: 64px;
+  float: left;
+  height: 64px;
+  width: 64px;
 `
 export const Metadata = styled.div`
   float: left;

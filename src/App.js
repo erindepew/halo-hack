@@ -1,9 +1,7 @@
 import React, { PureComponent} from 'react';
-import { BrowserRouter as Router } from "react-router-dom";
-import {Type} from '@spotify-internal/creator-tape'
-import {white} from '@spotify-internal/tokens/creator/web/tokens.common';
+import {Banner} from '@spotify-internal/creator-tape'
 import queryString from 'query-string';
-import { Wrapper} from './styled';
+import { Wrapper, StyledButtonPrimary} from './styled';
 import Halo from './Halo';
 import Form from './Form';
 import { clientId } from './config';
@@ -17,6 +15,7 @@ export default class App extends PureComponent {
       userLoggedIn: false,
       audioFeatures: null,
       audioInfo: null,
+      error: '',
     };
     this.appToken = clientId;
     this.redirectURI = encodeURIComponent(
@@ -90,9 +89,11 @@ export default class App extends PureComponent {
   getAudioFeatures = (value) => {
     const type = this.getContentType(value);
     const id = this.getContentId(value);
+    this.setState({error: ''});
     if (type === "track") {
       this.spotifyWebAPI.getAudioFeaturesForTrack(id, (error, res) => {
           if (error) {
+              this.setState({error});
               return;
           }
           this.setState({audioFeatures: res});
@@ -101,17 +102,23 @@ export default class App extends PureComponent {
     if (type === "artist") {
       this.spotifyWebAPI.getArtistTopTracks(id,"US", (error, res) => {
         if (error) {
+            this.setState({error});
             return;
         }
         this.getAudioFeaturesForTracks(res.tracks);
       });
     }
+    else {
+      this.setState({error: 'Not a valid track or artist spotify URI. Must be in "spotify:artist:{id}" or "spotify:track:{id}" format'});
+    }
   }
 
   getAudioFeaturesForTracks = (tracks) => {
       const trackUris = tracks.map(track => this.getContentId(track.uri));
+      this.setState({error: ''});
       this.spotifyWebAPI.getAudioFeaturesForTracks( trackUris, (error, res) => {
         if (error) {
+            this.setState({error});
             return;
         }
 
@@ -120,26 +127,27 @@ export default class App extends PureComponent {
   };
   
   averageAudioFeaturesForTracks = (tracks) => {
-    debugger;
     let average = {};
     const sum = tracks.reduce((a, b) => ({
       danceability: a.danceability + b.danceability,
       energy: a.energy + b.energy,
       key: a.key + b.key,
+      acousticness: a.acousticness + b.acousticness,
       loudness: a.loudness + b.loudness,
       mode: a.mode + b.mode,
       tempo: a.tempo + b.tempo}));
-    Object.keys(sum).map((key) => { 
-      average[key] = sum[key]/tracks.length});
+    Object.keys(sum).map((key) => average[key] = sum[key]/tracks.length);
     return average;
   }
 
   getAudioInfo = async (value) => {
     const type = this.getContentType(value);
     const id = this.getContentId(value);
+    this.setState({error: ''});
     if (type === "track") {
       this.spotifyWebAPI.getTrack(id, (error, res) => {
           if (error) {
+            this.setState({error});
               return;
           }
           this.setState({audioInfo: res, type});
@@ -148,6 +156,7 @@ export default class App extends PureComponent {
     if (type === "artist") {
       this.spotifyWebAPI.getArtist(id, (error, res) => {
         if (error) {
+          this.setState({error});
             return;
         }
         this.setState({audioInfo: res, type});
@@ -161,18 +170,14 @@ export default class App extends PureComponent {
   }
 
   render () {
-    const {audioFeatures, audioInfo, userLoggedIn, type} = this.state;
+    const {audioFeatures, audioInfo, userLoggedIn, type, error} = this.state;
     return ( 
-    <Router>
       <Wrapper>
-        {userLoggedIn ? <div>{audioFeatures ? 
+        {error && <Banner variant={Banner.error}>{error}</Banner>}
+        {userLoggedIn ? <div>{audioFeatures && type && audioInfo ? 
         <Halo audioFeatures={audioFeatures} audioInfo={audioInfo} type={type}/> : 
         <Form onSubmit={this.onSubmit} />}</div>  : 
-
-      <a href={this.loginLink}>
-              <Type.h3 variant={Type.heading3} color={white}>Login with your Spotify Account</Type.h3>
-        </a> }
-      </Wrapper>
-  </Router> );
+              <StyledButtonPrimary href={this.loginLink}>Login with your Spotify Account</StyledButtonPrimary> }
+      </Wrapper> );
   };
 };
