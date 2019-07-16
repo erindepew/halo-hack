@@ -1,9 +1,10 @@
-import React, { PureComponent } from 'react';
-import {Type} from '@spotify-internal/creator-tape'
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import {Type, LoadingIndicator} from '@spotify-internal/creator-tape'
 import {white} from '@spotify-internal/tokens/creator/web/tokens.common';
 import {Part, Main, View, Header, SubTitle, Title, TrackLink, StyledImage, Metadata} from './styled';
 
-export default class Halo extends PureComponent {
+class Halo extends Component {
   state = {
     complexity: 0,
     speed: 0,
@@ -12,19 +13,125 @@ export default class Halo extends PureComponent {
     randomness: 0,
     thickness: 0,
     hue: 0,
+    isLoading: true,
+    audioInfo: null,
+    type: null,
   }
 
   componentDidMount() {
-    const {danceability, energy, tempo, loudness, acousticness, key} = this.props.audioFeatures;
-    this.setState({
-      randomness: Math.round(10 * danceability),
-      complexity: Math.round(10 * energy),
-      speed: Math.round(500 / tempo),
-      size: Math.round(loudness + 30),
-      thickness: Math.round(acousticness * 20),
-      saturation: Math.round(10 * energy) * 10,
-      hue: key * 15
-    })
+    this.setValues(this.props.location.state);
+  }
+
+  setValues = async(value) => {
+    await this.getAudioFeatures(value);
+    await this.getAudioInfo(value);
+  }
+
+  getAudioInfo = async (value) => {
+    const type = this.getContentType(value);
+    const id = this.getContentId(value);
+    this.props.setError('');
+    if (type === "track") {
+      this.props.spotifyWebAPI.getTrack(id, (error, res) => {
+          if (error) {
+            this.props.setError(error)
+              return;
+          }
+          this.setState({audioInfo: res, type});
+        });
+      }
+    if (type === "artist") {
+      this.props.spotifyWebAPI.getArtist(id, (error, res) => {
+        if (error) {
+          this.props.setError(error)
+            return;
+        }
+        this.setState({audioInfo: res, type});
+      });
+    }
+    }
+
+
+  getContentId = (value) => {
+    const spotifyId = value.split(':')[2];
+    return spotifyId;
+  }
+
+  getContentType = (value) => {
+    const type = value.split(':')[1];
+    this.setState({type});
+    return type;
+  }
+
+  getAudioFeatures = (value) => {
+    const type = this.getContentType(value);
+    const id = this.getContentId(value);
+    this.props.setError('');
+    if (type === "track") {
+      this.props.spotifyWebAPI.getAudioFeaturesForTrack(id, (error, res) => {
+          if (error) {
+              this.props.setError(error)
+              return;
+          }
+          const {danceability, energy, tempo, loudness, acousticness, key} = res;
+          this.setState({
+            randomness: Math.round(10 * danceability),
+            complexity: Math.round(10 * energy),
+            speed: Math.round(500 / tempo),
+            size: Math.round(loudness + 30),
+            thickness: Math.round(acousticness * 20),
+            saturation: Math.round(10 * energy) * 10,
+            hue: key * 15,
+          });
+      })
+    }
+    if (type === "artist") {
+      this.props.spotifyWebAPI.getArtistTopTracks(id,"US", (error, res) => {
+        if (error) {
+            this.props.setError(error)
+            return;
+        }
+        this.getAudioFeaturesForTracks(res.tracks);
+      });
+    }
+    else {
+      this.setState({error: 'Not a valid track or artist spotify URI. Must be in "spotify:artist:{id}" or "spotify:track:{id}" format'});
+    }
+  }
+
+  getAudioFeaturesForTracks = (tracks) => {
+      const trackUris = tracks.map(track => this.getContentId(track.uri));
+      this.props.setError('');
+      this.props.spotifyWebAPI.getAudioFeaturesForTracks( trackUris, (error, res) => {
+        if (error) {
+            this.props.setError(error)
+            return;
+        }
+        const {danceability, energy, tempo, loudness, acousticness, key} = this.averageAudioFeaturesForTracks(res.audio_features);
+        this.setState({
+          randomness: Math.round(10 * danceability),
+          complexity: Math.round(10 * energy),
+          speed: Math.round(500 / tempo),
+          size: Math.round(loudness + 30),
+          thickness: Math.round(acousticness * 20),
+          saturation: Math.round(10 * energy) * 10,
+          hue: key * 15,
+        });
+      })
+  };
+  
+  averageAudioFeaturesForTracks = (tracks) => {
+    let average = {};
+    const sum = tracks.reduce((a, b) => ({
+      danceability: a.danceability + b.danceability,
+      energy: a.energy + b.energy,
+      key: a.key + b.key,
+      acousticness: a.acousticness + b.acousticness,
+      loudness: a.loudness + b.loudness,
+      mode: a.mode + b.mode,
+      tempo: a.tempo + b.tempo}));
+    Object.keys(sum).map((key) => average[key] = sum[key]/tracks.length);
+    return average;
   }
 
   renderDivs = (n, complexity) => {
@@ -46,9 +153,10 @@ export default class Halo extends PureComponent {
     };
 
   render() { 
-    const {complexity, size} = this.state;
-    const {audioInfo, type} = this.props;
+    const { complexity, size, audioInfo, type } = this.state;
     return ( 
+   <div>
+     {audioInfo ? 
     <div>
     {type && type === 'track' ? 
       <Header>
@@ -72,6 +180,9 @@ export default class Halo extends PureComponent {
       {this.renderDivs(1, complexity)}
 </Main>
 </View>
+  </div> : <LoadingIndicator/> }
     </div>
   )}
 };
+
+export default withRouter(Halo);

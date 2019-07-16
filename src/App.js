@@ -1,4 +1,5 @@
-import React, { PureComponent} from 'react';
+import React, { Component} from 'react';
+import { Route, withRouter } from 'react-router-dom';
 import {Banner} from '@spotify-internal/creator-tape'
 import queryString from 'query-string';
 import { Wrapper, StyledButtonPrimary} from './styled';
@@ -8,13 +9,11 @@ import { clientId } from './config';
 import * as api from './api';
 import SpotifyWebApi from 'spotify-web-api-js';
 
-export default class App extends PureComponent {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userLoggedIn: false,
-      audioFeatures: null,
-      audioInfo: null,
       error: '',
     };
     this.appToken = clientId;
@@ -76,108 +75,21 @@ export default class App extends PureComponent {
     }
   }
 
-  getContentId = (value) => {
-    const spotifyId = value.split(':')[2];
-    return spotifyId;
-  }
+  onSubmit = (value) => this.props.history.push({pathname: `/render/${value}`, state: value});
 
-  getContentType = (value) => {
-    const type = value.split(':')[1];
-    return type;
-  }
-
-  getAudioFeatures = (value) => {
-    const type = this.getContentType(value);
-    const id = this.getContentId(value);
-    this.setState({error: ''});
-    if (type === "track") {
-      this.spotifyWebAPI.getAudioFeaturesForTrack(id, (error, res) => {
-          if (error) {
-              this.setState({error});
-              return;
-          }
-          this.setState({audioFeatures: res});
-      })
-    }
-    if (type === "artist") {
-      this.spotifyWebAPI.getArtistTopTracks(id,"US", (error, res) => {
-        if (error) {
-            this.setState({error});
-            return;
-        }
-        this.getAudioFeaturesForTracks(res.tracks);
-      });
-    }
-    else {
-      this.setState({error: 'Not a valid track or artist spotify URI. Must be in "spotify:artist:{id}" or "spotify:track:{id}" format'});
-    }
-  }
-
-  getAudioFeaturesForTracks = (tracks) => {
-      const trackUris = tracks.map(track => this.getContentId(track.uri));
-      this.setState({error: ''});
-      this.spotifyWebAPI.getAudioFeaturesForTracks( trackUris, (error, res) => {
-        if (error) {
-            this.setState({error});
-            return;
-        }
-
-        this.setState({audioFeatures: this.averageAudioFeaturesForTracks(res.audio_features)});
-      })
-  };
-  
-  averageAudioFeaturesForTracks = (tracks) => {
-    let average = {};
-    const sum = tracks.reduce((a, b) => ({
-      danceability: a.danceability + b.danceability,
-      energy: a.energy + b.energy,
-      key: a.key + b.key,
-      acousticness: a.acousticness + b.acousticness,
-      loudness: a.loudness + b.loudness,
-      mode: a.mode + b.mode,
-      tempo: a.tempo + b.tempo}));
-    Object.keys(sum).map((key) => average[key] = sum[key]/tracks.length);
-    return average;
-  }
-
-  getAudioInfo = async (value) => {
-    const type = this.getContentType(value);
-    const id = this.getContentId(value);
-    this.setState({error: ''});
-    if (type === "track") {
-      this.spotifyWebAPI.getTrack(id, (error, res) => {
-          if (error) {
-            this.setState({error});
-              return;
-          }
-          this.setState({audioInfo: res, type});
-        });
-      }
-    if (type === "artist") {
-      this.spotifyWebAPI.getArtist(id, (error, res) => {
-        if (error) {
-          this.setState({error});
-            return;
-        }
-        this.setState({audioInfo: res, type});
-      });
-    }
-    }
-
-  onSubmit = (value) => {
-    this.getAudioFeatures(value);
-    this.getAudioInfo(value);
-  }
+  setError = (error) => this.setState({error});
 
   render () {
-    const {audioFeatures, audioInfo, userLoggedIn, type, error} = this.state;
+    const {userLoggedIn, error} = this.state;
     return ( 
       <Wrapper>
-        {error && <Banner variant={Banner.error}>{error}</Banner>}
-        {userLoggedIn ? <div>{audioFeatures && type && audioInfo ? 
-        <Halo audioFeatures={audioFeatures} audioInfo={audioInfo} type={type}/> : 
-        <Form onSubmit={this.onSubmit} />}</div>  : 
-              <StyledButtonPrimary href={this.loginLink}>Login with your Spotify Account</StyledButtonPrimary> }
+        { error && <Banner variant={Banner.error}>{error}</Banner> }
+        <Route exact path="/" render={() => 
+          userLoggedIn ?  <Form onSubmit={this.onSubmit} /> 
+          : <StyledButtonPrimary href={this.loginLink}>Login with your Spotify Account</StyledButtonPrimary> } />
+        <Route exact path="/render/:uri" render={() => <Halo spotifyWebAPI={this.spotifyWebAPI} setError={this.setError}/>} />
       </Wrapper> );
   };
 };
+
+export default withRouter(App);
