@@ -8,7 +8,7 @@ class Halo extends Component {
   state = {
     complexity: 0,
     speed: 0,
-    saturation: [],
+    saturation: 0,
     size: 0,
     randomness: 0,
     thickness: 0,
@@ -19,7 +19,7 @@ class Halo extends Component {
   }
 
   componentDidMount() {
-    this.setValues(this.props.location.state);
+    this.setValues(window.location.pathname.split('/').pop());
   }
 
   setValues = async(value) => {
@@ -95,7 +95,7 @@ class Halo extends Component {
       });
     }
     else {
-      this.setState({error: 'Not a valid track or artist spotify URI. Must be in "spotify:artist:{id}" or "spotify:track:{id}" format'});
+      this.props.setError('Not a valid track or artist spotify URI. Must be in "spotify:artist:{id}" or "spotify:track:{id}" format');
     }
   }
 
@@ -154,6 +154,7 @@ class Halo extends Component {
 
   render() { 
     const { complexity, size, audioInfo, type } = this.state;
+    console.log(JSON.stringify(this.state));
     return ( 
    <div>
      {audioInfo ? 

@@ -1,9 +1,10 @@
 import React, { Component} from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Redirect } from 'react-router-dom';
 import {Banner} from '@spotify-internal/creator-tape'
 import queryString from 'query-string';
 import { Wrapper, StyledButtonPrimary} from './styled';
 import Halo from './Halo';
+import HaloDemo from './HaloDemo';
 import Form from './Form';
 import { clientId } from './config';
 import * as api from './api';
@@ -75,7 +76,7 @@ class App extends Component {
     }
   }
 
-  onSubmit = (value) => this.props.history.push({pathname: `/render/${value}`, state: value});
+  onSubmit = (value) => this.props.history.push({pathname: `/render/${value}`});
 
   setError = (error) => this.setState({error});
 
@@ -87,7 +88,9 @@ class App extends Component {
         <Route exact path="/" render={() => 
           userLoggedIn ?  <Form onSubmit={this.onSubmit} /> 
           : <StyledButtonPrimary href={this.loginLink}>Login with your Spotify Account</StyledButtonPrimary> } />
-        <Route exact path="/render/:uri" render={() => <Halo spotifyWebAPI={this.spotifyWebAPI} setError={this.setError}/>} />
+        <Route path="/callback" render={() => <Redirect to="/"/>} />
+        <Route exact path="/render/static" render={() => <HaloDemo/>} />
+        <Route path="/render/:uri" render={() => <Halo spotifyWebAPI={this.spotifyWebAPI} setError={this.setError}/>} />
       </Wrapper> );
   };
 };
