@@ -1,31 +1,31 @@
 import styled, {keyframes} from 'styled-components';
 
 
-// const zRotate = keyframes`
-// from {
-//   transform: rotateZ(0deg)
-// }
-// to {
-//   transform: rotateZ(360deg)}`;
+const zRotate = keyframes`
+from {
+  transform: rotateZ(0deg)
+}
+to {
+  transform: rotateZ(360deg)}`;
 
-const zRotate = 0;
+// const zRotate = 0;
 
-// const rotate = keyframes`
-// from {
-//   transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg)
-// }
-// to{
-//   transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg)}`;
+const rotate = keyframes`
+from {
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg)
+}
+to{
+  transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg)}`;
 
-const rotate = 0;
+// const rotate = 0;
 
-// const zRotateView = keyframes`
-// from {
-//   transform: rotateX(60deg) rotateZ(0deg)}
-// to {
-//   transform: rotateX(60deg) rotateZ(360deg)}`;
+const zRotateView = keyframes`
+from {
+  transform: rotateX(60deg) rotateZ(0deg)}
+to {
+  transform: rotateX(60deg) rotateZ(360deg)}`;
 
-const zRotateView = 0;
+// const zRotateView = 0;
 
 export const View = styled.div`
   perspective: 800;

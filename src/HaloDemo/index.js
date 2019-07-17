@@ -3,7 +3,7 @@ import {Part, Main, View } from './styled';
 
 export default class Halo extends PureComponent {
   state = {
-    complexity:1, // energy
+    complexity:5, // energy
     speed:4, // tempo
     saturation:50, // energy
     size:18, // loudness 
