@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/halo-hack/static/js/main.e777d94d.chunk.js",
-    "main.js.map": "/halo-hack/static/js/main.e777d94d.chunk.js.map",
+    "main.js": "/halo-hack/static/js/main.6520f458.chunk.js",
+    "main.js.map": "/halo-hack/static/js/main.6520f458.chunk.js.map",
     "runtime~main.js": "/halo-hack/static/js/runtime~main.b911e7e3.js",
     "runtime~main.js.map": "/halo-hack/static/js/runtime~main.b911e7e3.js.map",
-    "static/js/2.a778e1e4.chunk.js": "/halo-hack/static/js/2.a778e1e4.chunk.js",
-    "static/js/2.a778e1e4.chunk.js.map": "/halo-hack/static/js/2.a778e1e4.chunk.js.map",
+    "static/js/2.832232b5.chunk.js": "/halo-hack/static/js/2.832232b5.chunk.js",
+    "static/js/2.832232b5.chunk.js.map": "/halo-hack/static/js/2.832232b5.chunk.js.map",
     "index.html": "/halo-hack/index.html",
-    "precache-manifest.fdda40d0ab8d9bfe19adec2426918439.js": "/halo-hack/precache-manifest.fdda40d0ab8d9bfe19adec2426918439.js",
+    "precache-manifest.dbc86c7427de1de6261ba4d8bec08b19.js": "/halo-hack/precache-manifest.dbc86c7427de1de6261ba4d8bec08b19.js",
     "service-worker.js": "/halo-hack/service-worker.js"
   }
 }
