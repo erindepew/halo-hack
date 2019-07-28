@@ -19,7 +19,7 @@ class App extends Component {
     };
     this.appToken = clientId;
     this.redirectURI = encodeURIComponent(
-      `${window.location.protocol }//${ window.location.host }/callback`
+      `${window.location.protocol }//${ window.location.host }${process.env.PUBLIC_URL}/callback`
     );
     this.scopes = encodeURIComponent(
       'playlist-modify-public playlist-modify-private user-read-private streaming user-read-email user-read-birthdate user-modify-playback-state user-read-playback-state user-read-currently-playing user-read-recently-played',
@@ -84,13 +84,17 @@ class App extends Component {
     const {userLoggedIn, error} = this.state;
     return ( 
       <Wrapper>
+        {console.log(process.env.PUBLIC_URL)}
+        {console.log(this.props.location)}
+        {console.log(userLoggedIn)}
         { error && <Banner variant={Banner.error}>{error}</Banner> }
-        <Route exact path="/" render={() => 
+        <Route exact path={`/`} render={() => 
           userLoggedIn ?  <Form onSubmit={this.onSubmit} /> 
           : <StyledButtonPrimary href={this.loginLink}>Login with your Spotify Account</StyledButtonPrimary> } />
-        <Route path="/callback" render={() => <Redirect to="/"/>} />
-        <Route exact path="/render/static" render={() => <HaloDemo/>} />
-        <Route path="/render/:uri" render={() => <Halo spotifyWebAPI={this.spotifyWebAPI} setError={this.setError}/>} />
+        <Route path={`/callback`} render={() => <Redirect to="/"/>} />
+        <Route exact path={`/render/static`} render={() => <HaloDemo/>} />
+        <Route path={`/render/:uri`} render={() => <Halo spotifyWebAPI={this.spotifyWebAPI} setError={this.setError}/>} />
+        <Route path="*" component={() => <div>404 not found</div>}/>
       </Wrapper> );
   };
 };
