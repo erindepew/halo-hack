@@ -3,6 +3,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Creates a unique audio "fingerprint" for tracks and artists. Built using [Spotify's public web API for audio features](https://developer.spotify.com/documentation/web-api/reference/tracks/) and internal UI library Creator Tape.
 
+The site is deployed at [https://erindepew.github.io/halo-hack](https://erindepew.github.io/halo-hack) 
+
 ## Available Scripts
 
 In the project directory, you can run:
