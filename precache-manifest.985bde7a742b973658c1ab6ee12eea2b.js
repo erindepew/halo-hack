@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "afdbe6afcaa709e8e6731d5ea3f16289",
+    "revision": "4e6f41b0526050f7a30b0f58d996ec1a",
     "url": "/halo-hack/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/halo-hack/static/js/2.a778e1e4.chunk.js"
   },
   {
-    "revision": "2348d19ce55a988248d6",
-    "url": "/halo-hack/static/js/main.8932c53d.chunk.js"
+    "revision": "d6a8864bb92162c48e2b",
+    "url": "/halo-hack/static/js/main.22f52517.chunk.js"
   },
   {
     "revision": "b0ddc48688c621453932",
