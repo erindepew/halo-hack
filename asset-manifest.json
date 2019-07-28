@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/halo-hack/static/js/main.f8745b77.chunk.js",
-    "main.js.map": "/halo-hack/static/js/main.f8745b77.chunk.js.map",
+    "main.js": "/halo-hack/static/js/main.e79cde3c.chunk.js",
+    "main.js.map": "/halo-hack/static/js/main.e79cde3c.chunk.js.map",
     "runtime~main.js": "/halo-hack/static/js/runtime~main.b911e7e3.js",
     "runtime~main.js.map": "/halo-hack/static/js/runtime~main.b911e7e3.js.map",
     "static/js/2.832232b5.chunk.js": "/halo-hack/static/js/2.832232b5.chunk.js",
     "static/js/2.832232b5.chunk.js.map": "/halo-hack/static/js/2.832232b5.chunk.js.map",
     "index.html": "/halo-hack/index.html",
-    "precache-manifest.5e3cedd1f96ba4031b206f187fc6c5b9.js": "/halo-hack/precache-manifest.5e3cedd1f96ba4031b206f187fc6c5b9.js",
+    "precache-manifest.b5fe2639488002d6d6bbaa1d4ae4d423.js": "/halo-hack/precache-manifest.b5fe2639488002d6d6bbaa1d4ae4d423.js",
     "service-worker.js": "/halo-hack/service-worker.js"
   }
 }

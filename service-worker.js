@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/halo-hack/precache-manifest.5e3cedd1f96ba4031b206f187fc6c5b9.js"
+  "/halo-hack/precache-manifest.b5fe2639488002d6d6bbaa1d4ae4d423.js"
 );
 
 self.addEventListener('message', (event) => {
