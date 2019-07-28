@@ -1,19 +1,21 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Creates a unique audio "fingerprint" for tracks and artists. Built using [Spotify's public web API for audio features](https://developer.spotify.com/documentation/web-api/reference/tracks/) and internal UI library Creator Tape.
+
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `yarn start`
 
 Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://local.spotify.com:3000](http://local.spotify.com:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### Test Tracks and Artists 
+### Test Tracks and Artists
 
 
 Fleetwood Mac - Landslide spotify:track:5ihS6UUlyQAfmp48eSkxuQ

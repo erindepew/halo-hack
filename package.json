@@ -2,6 +2,7 @@
   "name": "halo-hack",
   "version": "0.1.0",
   "private": true,
+  "homepage":"https://erindepew.github.io/halo-hack",
   "dependencies": {
     "@spotify-internal/creator-tape": "^3.6.0",
     "@spotify-internal/tape-tokens": "^2.0.2",
@@ -13,9 +14,12 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "spotify-web-api-js": "^1.2.0",
-    "styled-components": "^4.2.0"
+    "styled-components": "^4.2.0",
+    "lodash": ">=4.17.13"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
