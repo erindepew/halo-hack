@@ -84,9 +84,6 @@ class App extends Component {
     const {userLoggedIn, error} = this.state;
     return ( 
       <Wrapper>
-        {console.log(process.env.PUBLIC_URL)}
-        {console.log(this.props.location)}
-        {console.log(userLoggedIn)}
         { error && <Banner variant={Banner.error}>{error}</Banner> }
         <Route exact path={`/`} render={() => 
           userLoggedIn ?  <Form onSubmit={this.onSubmit} /> 

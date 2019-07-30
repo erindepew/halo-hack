@@ -154,7 +154,6 @@ class Halo extends Component {
 
   render() { 
     const { complexity, size, audioInfo, type } = this.state;
-    console.log(JSON.stringify(this.state));
     return ( 
    <div>
      {audioInfo ? 
